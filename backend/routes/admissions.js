@@ -8,7 +8,7 @@ const admissionValidation = [
   body('parentName').trim().notEmpty().withMessage('Parent name is required').isLength({ max: 100 }),
   body('studentName').trim().notEmpty().withMessage('Student name is required').isLength({ max: 100 }),
   body('classApplyingFor').notEmpty().withMessage('Class is required'),
-  body('phone').matches(/^[6-9]\d{9}$/).withMessage('Enter a valid Indian mobile number'),
+ body('phone').matches(/^[0-9]{10,11}$/).withMessage('Enter a valid phone number'),
   body('email').isEmail().withMessage('Enter a valid email').normalizeEmail(),
   body('message').optional().isLength({ max: 1000 }).withMessage('Message too long')
 ];
