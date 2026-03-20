@@ -3,17 +3,16 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const Admission = require('../models/Admission');
 
-// Validation rules
 const admissionValidation = [
   body('parentName').trim().notEmpty().withMessage('Parent name is required').isLength({ max: 100 }),
   body('studentName').trim().notEmpty().withMessage('Student name is required').isLength({ max: 100 }),
   body('classApplyingFor').notEmpty().withMessage('Class is required'),
- body('phone').matches(/^[0-9]{10,11}$/).withMessage('Enter a valid phone number'),
+  body('phone').trim().notEmpty().withMessage('Phone number is required').isLength({ min: 7, max: 15 }),
   body('email').isEmail().withMessage('Enter a valid email').normalizeEmail(),
   body('message').optional().isLength({ max: 1000 }).withMessage('Message too long')
 ];
 
-// POST /api/admissions - Submit admission inquiry
+// POST /api/admissions
 router.post('/', admissionValidation, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -34,7 +33,7 @@ router.post('/', admissionValidation, async (req, res) => {
   }
 });
 
-// GET /api/admissions - Get all admissions (admin use)
+// GET /api/admissions
 router.get('/', async (req, res) => {
   try {
     const admissions = await Admission.find().sort({ submittedAt: -1 });

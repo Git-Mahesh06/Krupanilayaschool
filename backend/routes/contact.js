@@ -5,7 +5,7 @@ const Contact = require('../models/Contact');
 
 const contactValidation = [
   body('name').trim().notEmpty().withMessage('Name is required').isLength({ max: 100 }),
-  body('phone').matches(/^[0-9]{10,11}$/).withMessage('Enter a valid phone number'),
+  body('phone').trim().notEmpty().withMessage('Phone number is required').isLength({ min: 7, max: 15 }),
   body('email').isEmail().withMessage('Enter a valid email').normalizeEmail(),
   body('message').trim().notEmpty().withMessage('Message is required').isLength({ max: 1000 })
 ];
@@ -30,7 +30,7 @@ router.post('/', contactValidation, async (req, res) => {
   }
 });
 
-// GET /api/contact - Get all messages (admin use)
+// GET /api/contact
 router.get('/', async (req, res) => {
   try {
     const messages = await Contact.find().sort({ submittedAt: -1 });
